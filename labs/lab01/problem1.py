@@ -1,7 +1,7 @@
-array = [int(i) for i in input().split()]
+array = [float(i) for i in input().split()]
 squares = set()
-for i in range(len(array)):
-    squares.add(array[i]**2)
-result = list(squares).sort()
-for i in squares:
+for i in array:
+    squares.add(i**2)
+result = sorted(list(squares))
+for i in result:
     print(i, end = ' ')
