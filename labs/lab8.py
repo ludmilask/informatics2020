@@ -1,26 +1,34 @@
 class ConsoleIterator:
-    def __iter__(self):
+    def __init__(self):
         self.numbers = []
+
+    def __iter__(self):
         return self
 
     def __next__(self):
-        flag = True
-        while flag:
-            if flag and len(self.numbers) == 0:
-                str = input().split()
-                for i in str:
-                    if i.isdigit():
-                        self.numbers.append(int(i))
-                    else:
-                        flag = False
+        while True:
+            if len(self.numbers) == 0:
+
+                try:
+                    split_string = input().split()
+                except EOFError:
+                    raise StopIteration
+
+                for token in split_string:
+                    try:
+                        number = int(token)
+                    except ValueError:
+                        raise StopIteration
+                    self.numbers.append(number)
+
             elif len(self.numbers) != 0:
                 return self.numbers.pop(0)
-        raise StopIteration
 
 
-total_sum = 0
+if __name__ == "__main__":
+    total_sum = 0
 
-for number in ConsoleIterator():
-    total_sum = total_sum + number
+    for number in ConsoleIterator():
+        total_sum = total_sum + number
 
-print(f'Sum of entered numbers is {total_sum}')
+    print(f'Sum of entered numbers is {total_sum}')
