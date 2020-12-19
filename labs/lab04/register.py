@@ -1,3 +1,4 @@
+import json
 import argparse
 
 parser = argparse.ArgumentParser()
@@ -9,5 +10,5 @@ parser.add_argument("--sex", required=True, choices=['F', 'M'])
 parser.add_argument("--married", default=False, action='store_true')
 parser.add_argument("--hobbies", default=None, nargs='*')
 
-with open("journal.txt", "w") as output_f:
-    output_f.write(str(parser.parse_args().__dict__))
+with open("journal.txt", "a") as output_f:
+    output_f.write(json.dumps(vars(parser.parse_args())))
