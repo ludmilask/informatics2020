@@ -1,15 +1,7 @@
-# Поиск наибольшего общего делителя алгоритмом Евклида
-def gcd(a, b):
-    while a > 0 and b > 0:
-        if a > b: 
-            a = a % b
-        else:
-            b = b % a
-    return a + b
+from math import gcd
+
 
 class Rational:
-    nom: int
-    denom: int
 
     def __init__(
         self,
@@ -26,10 +18,7 @@ class Rational:
         if self.denom < 0:
             self.nom *= -1
             self.denom *= -1
-        gcd_nom_denom = gcd(
-            self.nom if self.nom > 0 else -self.nom,
-            self.denom
-        )
+        gcd_nom_denom = gcd(abs(self.nom), self.denom)
         self.nom = self.nom // gcd_nom_denom
         self.denom = self.denom // gcd_nom_denom
 
@@ -47,39 +36,46 @@ class Rational:
         return float(self.nom) / float(self.denom)
     
     def __add__(self, second):
-        res = Rational(nom = self.nom*second.denom + self.denom*second.nom, denom = self.denom*second.denom)
+        res = Rational(nom=self.nom*second.denom + self.denom*second.nom, denom=self.denom*second.denom)
         res.reduce()
         return res
     
     def __sub__(self, second):
-        res = Rational(nom = self.nom*second.denom - self.denom*second.nom, denom = self.denom*second.denom)
+        res = Rational(nom=self.nom*second.denom - self.denom*second.nom, denom=self.denom*second.denom)
         res.reduce()
         return res
         
     def __mul__(self, second):
-        res = Rational(nom = self.nom*second.nom, denom = self.denom*second.denom)
+        res = Rational(nom=self.nom*second.nom, denom=self.denom*second.denom)
         res.reduce()
         return res
         
     def __truediv__(self, second):
-        res = Rational(nom = self.nom*second.denom, denom = self.denom*second.nom)
+        res = Rational(nom=self.nom*second.denom, denom=self.denom*second.nom)
         res.reduce()
         return res
 
+    def __eq__(self, other):
+        if self.nom == other.nom and self.denom == other.denom:
+            return True
+        else:
+            return False
+
 
 def test_reduce():
-    x = Rational(2,2)
+    x = Rational(2, 2)
     assert x.nom == 1
     assert x.denom == 1
     
-    y = Rational(4,6)
+    y = Rational(4, 6)
     assert y.nom == 2
     assert y.denom == 3
 
 
 def test_operations():
-    x = Rational(12,73)
-    y = Rational(17,6)
+    x = Rational(12, 73)
+    y = Rational(17, 6)
+    w = Rational(-34, -12)
     
     z = x + y
     assert z.nom == 1313
@@ -97,9 +93,13 @@ def test_operations():
     assert z.nom == 72
     assert z.denom == 1241
 
+    assert x != y
+    assert x != w
+    assert y == w
+
 
 def test_cast_to_float():
-    x = Rational(1,8)
+    x = Rational(1, 8)
     as_float = x.to_float()
     assert as_float == 0.125
 
@@ -112,7 +112,9 @@ def test_parse_from_string():
     assert y.nom == -1
     assert y.denom == 8
 
-test_reduce()
-test_operations()
-test_cast_to_float()
-test_parse_from_string()
+
+if __name__ == '__main__':
+    test_reduce()
+    test_operations()
+    test_cast_to_float()
+    test_parse_from_string()
